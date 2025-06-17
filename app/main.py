@@ -1,3 +1,4 @@
+#No AI assistance used for creating this file
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
@@ -10,7 +11,7 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],  # React frontend URL
+    allow_origins=["http://localhost:3000"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -18,7 +19,7 @@ app.add_middleware(
 
 @app.get("/")
 async def root():
-    """Root endpoint returning API information."""
+    """Root Endpoint returning API information."""
     return JSONResponse(
         content={
             "message": "Welcome to AI Semantic Code Refactorer API",

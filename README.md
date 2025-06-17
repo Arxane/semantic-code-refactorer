@@ -15,6 +15,7 @@ This project aims to create a web-based tool that can:
 
 ### Prerequisites
 - Python 3.8+
+- PostgreSQL
 - Node.js 16+
 - Git
 - Your favorite code editor
@@ -30,20 +31,40 @@ cd semantic-code-refactorer
 2. Set up the backend:
 ```bash
 # Create and activate virtual environment
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+python -m venv .venv
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 
 # Install dependencies
 pip install -r requirements.txt
 ```
 
-3. Set up the frontend:
+3. Set up PostgreSQL:
+```bash
+# Create database
+createdb code_refactorer
+```
+
+4. Configure environment variables:
+Create a `.env` file in the project root:
+```
+DATABASE_URL=postgresql://postgres:6865@localhost:5432/code_refactorer
+SECRET_KEY=your-secret-key
+OPENAI_API_KEY=your-openai-api-key
+FRONTEND_URL=http://localhost:3000
+```
+
+5. Run database migrations:
+```bash
+alembic upgrade head
+```
+
+6. Set up the frontend:
 ```bash
 cd frontend
 npm install
 ```
 
-4. Start development servers:
+7. Start development servers:
 ```bash
 # Terminal 1 - Backend
 uvicorn app.main:app --reload
@@ -57,19 +78,42 @@ npm run dev
 
 ```
 semantic-code-refactorer/
-├── app/                    # Backend application
-│   ├── api/               # API endpoints
-│   ├── core/              # Core functionality
-│   ├── models/            # Database models
-│   └── services/          # Business logic
-├── frontend/              # React frontend
+├── alembic/              # Database migrations
+├── app/                  # Backend application
+│   ├── core/            # Core functionality
+│   │   ├── config.py    # Configuration settings
+│   │   └── database.py  # Database connection
+│   ├── models/          # Database models
+│   │   └── code_refactoring.py  # SQLAlchemy models
+│   ├── schemas/         # Pydantic models
+│   └── main.py         # FastAPI application
+├── frontend/            # React frontend
 │   ├── src/
-│   │   ├── components/    # React components
-│   │   ├── pages/        # Page components
-│   │   └── services/     # API services
-│   └── public/           # Static files
-└── tests/                # Test files
+│   │   ├── components/  # React components
+│   │   ├── pages/      # Page components
+│   │   └── services/   # API services
+│   └── public/         # Static files
+└── tests/              # Test files
 ```
+
+## Database Models
+
+- `CodeRefactoring`: Stores code refactoring requests and results
+  - Original and refactored code
+  - Explanation of changes
+  - Status tracking
+  - Timestamps
+
+- `RefactoringFeedback`: Stores user feedback
+  - Ratings and comments
+  - Links to refactoring requests
+  - Timestamps
+
+## API Documentation
+
+Once the backend is running, access the API documentation at:
+- Swagger UI: http://localhost:8000/docs
+- ReDoc: http://localhost:8000/redoc
 
 ## Contributing
 
@@ -81,4 +125,4 @@ semantic-code-refactorer/
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details. 
+This project is licensed under the MIT License - see the LICENSE file for details.
