@@ -3,6 +3,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
+from app.routes import code_refactoring
+
 app = FastAPI(
     title="AI Semantic Code Refactorer",
     description="An AI-powered code refactoring service",
@@ -17,9 +19,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+app.include_router(code_refactoring.router)
+
 @app.get("/")
 async def root():
-    """Root Endpoint returning API information."""
     return JSONResponse(
         content={
             "message": "Welcome to AI Semantic Code Refactorer API",
@@ -30,7 +33,6 @@ async def root():
 
 @app.get("/health")
 async def health_check():
-    """Health check endpoint for monitoring."""
     return JSONResponse(
         content={
             "status": "healthy",
