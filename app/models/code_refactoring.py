@@ -1,5 +1,5 @@
 #AI assistance was used for creating this file
-from sqlalchemy import Column, Integer, String, Text, DateTime, ForeignKey
+from sqlalchemy import Column, Integer, String, Text, DateTime, ForeignKey, ARRAY
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 from datetime import datetime, UTC
@@ -18,6 +18,12 @@ class CodeRefactoring(Base):
     refactored_code = Column(Text, nullable=True)
     # Explanation of what changes were made and why
     explanation = Column(Text, nullable=True)
+    # Programming language of the code
+    language = Column(String, nullable=True)
+    # Areas to focus on during refactoring 
+    focus_areas = Column(ARRAY(String), nullable=True)
+    # Analysis result as JSON string
+    analysis_result = Column(Text, nullable=True)
     # Current status of the refactoring
     status = Column(String, nullable=False)
     # Timestamps for tracking when the refactoring was created and last updated
